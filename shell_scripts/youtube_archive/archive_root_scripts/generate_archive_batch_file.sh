@@ -1,43 +1,35 @@
 #!/bin/bash
 
-# MUST BE RUN UNDER MSYS2/MinGW, NOT ON LINUX/MAC SYSTEMS
-#
-# Generates batch files for mass downloading a YouTube archive
-# Expects a channel map file in the following format:
-# Name Of Video Channel=https://full_URL_to_channel_page.com/
-# Lines in map file starting with '#' are ignored (commented out)
-#
-# This is intended to be used with a mapped network drive as root
-
-test "$1" = "-h" && echo "vars: DRIVE, YTC, CHANMAP, BATFILE" && exit
-
-test -z "$DRIVE" && DRIVE="Y:"
-test -z "$YTC" && YTC="YouTube Channels"
-test -z "$CHANMAP" && CHANMAP=yt_channel_mappings.txt
-test -z "$BATFILE" && BATFILE=perform_yt_archive_update.bat
-
-test ! -e "$CHANMAP" && echo "File $CHANMAP missing" && exit 1
-
-echo "$DRIVE" > $BATFILE
-
-while read LINE
-	do [ -z "$LINE" ] && continue
-	[ "${LINE:0:1}" = "#" ] && continue  # 0 processes
-	NAME="${LINE/=http*/}" # 0 processes
-	URL="${LINE/*=http/http}" # 0 processes
-	URL="${URL/$'\r'/}"
-#	test "$(echo "$LINE" | sed 's/\(^.\).*/\1/')" = "#" && continue # 2 processes
-#	NAME="$(echo "$LINE" | sed 's/=http.*//')" # 2 processes
-#	URL="$(echo "$LINE" | sed 's/.*=http/http/')" # 2 processes
-	echo "NAME $NAME, URL $URL"
-	echo "md \"\\$YTC\\$NAME\"" >> $BATFILE
-	echo "cd \"\\$YTC\\$NAME\"" >> $BATFILE
-	echo 'call \download_entire_youtube_channel "'$URL'"' >> $BATFILE
-#	echo 'cd \' >> $BATFILE
-done < "$CHANMAP"
-
-echo 'cd \' >> $BATFILE
-
-if [ "$(uname)" = "Linux" ]
-	then sed 's/$/\r/' $BATFILE > foofooX; mv foofooX $BATFILE
+if [[ "$1" == "-h" ]]; then
+    echo "vars: DRIVE, YTC, CHANMAP, BATFILE"
+    exit
 fi
+
+# Set default variables if they are not currrently set
+if [[ -z "${DRIVE}" ]];   then DRIVE="Y:"; fi
+if [[ -z "${YTC}" ]];     then YTC="YouTube Channels"; fi
+if [[ -z "${CHANMAP}" ]]; then CHANMAP="yt_channel_mappings.txt"; fi
+if [[ -z "${BATFILE}" ]]; then BATFILE="perform_yt_archive_update.bat"; fi
+
+# Ensure the channel mapping file exists
+if [[ ! -e "${CHANMAP}" ]]; then
+    echo "File ${CHANMAP} missing"
+    exit 1
+fi
+
+printf "@echo off\r\n" >"${BATFILE}"
+printf "pushd \"${DRIVE}\\${YTC}\"\r\n" >>"${BATFILE}"
+while IFS='=' read -ra LINE; do
+    channel_name="${LINE[0]}"
+    channel_url=$(echo "${LINE[1]}" | tr -d '\r')
+
+    if [[ "${channel_name:0:1}" == "#" ]]; then
+        continue
+    fi
+
+    printf 'md "%s"\r\n' "${channel_name}" >>"${BATFILE}"
+    printf 'pushd "%s"\r\n' "${channel_name}" >>"${BATFILE}"
+    printf 'call "%%~dp0\\download_entire_youtube_channel.bat" "%s"\r\n' "${channel_url}" >>"${BATFILE}"
+    printf "popd\r\n" >>"${BATFILE}"
+done <"${CHANMAP}"
+printf "popd\r\n" >>"${BATFILE}"
