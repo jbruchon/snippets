@@ -1,7 +1,7 @@
 @echo off
 
 :: Constants
-set "ROOT_DIR=%~dp0"
+if "%ROOT_DIR%"=="" set "ROOT_DIR=%~dp0"
 set "COOKIE_FILE=%ROOT_DIR%\cookies.txt"
 set "FFMPEG_LOCATION=%ROOT_DIR%\ffmpeg.exe"
 set "DL_ARCHIVE=%ROOT_DIR%\ytdl_archive.txt"
