@@ -4,7 +4,7 @@
 set "ROOT_DIR=%~dp0"
 set "COOKIE_FILE=%ROOT_DIR%\cookies.txt"
 set "FFMPEG_LOCATION=%ROOT_DIR%\ffmpeg.exe"
-set "DL_ARCHIVE=%ROOT_DIR%\yt_dl_archive.txt"
+set "DL_ARCHIVE=%ROOT_DIR%\ytdl_archive.txt"
 set "PLE=50"
 set "YOUTUBE_DL=%ROOT_DIR%\yt-dlp.exe"
 
