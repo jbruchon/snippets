@@ -1,0 +1,18 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\SOFTWARE\7-Zip\Compression]
+"ArcHistory"=-
+
+[HKEY_CURRENT_USER\SOFTWARE\7-Zip\FM]
+"CopyHistory"=-
+"FolderHistory"=-
+"PanelPath0"=-
+"PanelPath1"=-
+"PanelPath2"=-
+"PanelPath3"=-
+"PanelPath4"=-
+"PanelPath5"=-
+"PanelPath6"=-
+"PanelPath7"=-
+"PanelPath8"=-
+"PanelPath9"=-

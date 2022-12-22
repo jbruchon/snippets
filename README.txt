@@ -35,10 +35,24 @@ Happy hacking!
 
 Batch files for Windows Command Prompt
 --------------------------------------
-batch_files/extract_audio_to_wav:
-    use ffmpeg to pull the first audio track out of a video file (to WAV)
+batch_files/clear_event_logs.bat
+    clear all possible Event Viewer logs in Windows
 batch_files/companionlink_revival_kit:
     script to watch-and-restart CompanionLink (or anything you edit it for)
+batch_files/compress_win10_with_lzx.bat
+    compress Windows and program files with LZX
+batch_files/compress_win10_with_lzx_unattended.bat
+    same as above, but use nircmdc (nirsoft.net) to run minimized
+batch_files/delete_unused_driver_packages.bat
+    delete all third-party drivers no longer associated with any devices
+batch_files/extract_audio_to_wav:
+    use ffmpeg to pull the first audio track out of a video file (to WAV)
+batch_files/fix_win10_recovery_on_c.bat
+    for moving Windows Recovery Environment from a recovery partition to C:
+    copy the RE partition \Recovery contents to C:\Recovery then run this
+batch_files/reset_print_spooler.bat
+    stops print spooler, force-deletes all print jobs, restarts the spooler
+    super handy for clearing a "stuck" print job that blocks all printing
 
 C functions (and header files to use them)
 ------------------------------------------
@@ -55,6 +69,12 @@ c/strcat_fixed: a faster strcat() for when string length is already known
 c/string_malloc: a simple, fast memory allocator for small pieces  of data
 c/win_stat: Windows stat() and NT-to-UNIX epoch portability helper code
 c/xorpipe: XORs the data in a pipeline by a 32-bit key
+
+Windows MRU (Most Recently Used) Clear
+--------------------------------------
+The registry and batch files in MRU Clear are used to wipe various Windows
+registry entries that track files, folders, and programs you've used. They
+can sometimes have surpising side effects, so be careful!
 
 Shell scripts (POSIX sh and/or GNU Bash)
 ----------------------------------------

@@ -1,0 +1,19 @@
+Windows Registry Editor Version 5.00
+
+[-HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVConnector\cIconCache]
+
+[-HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVConnector\cRecentFiles]
+
+[-HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVConnector\cRecentFolders]
+
+[-HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\FullScreenApprovedFiles]
+
+[-HKEY_CURRENT_USER\SOFTWARE\Adobe\Adobe Acrobat\DC\AVGeneral\cIconCache]
+
+[-HKEY_CURRENT_USER\SOFTWARE\Adobe\Adobe Acrobat\DC\AVGeneral\cRecentFiles]
+
+[-HKEY_CURRENT_USER\SOFTWARE\Adobe\Adobe Acrobat\DC\AVGeneral\cRecentFolders]
+
+[-HKEY_CURRENT_USER\Software\Adobe\Adobe Acrobat\DC\FullScreenApprovedFiles]
+
+[-HKEY_CURRENT_USER\SOFTWARE\Adobe\MediaBrowser\MRU]
