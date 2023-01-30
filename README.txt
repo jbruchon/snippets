@@ -106,6 +106,8 @@ shell_scripts/youtube_archive/count_files_in_dirs:
     show count of files in all subdirectories, excluding their subdirs
 shell_scripts/youtube_archive/find_video_files_without_audio:
     scan entire archive for video files with missing audio tracks
+shell_scripts/youtube_archive/create_quantity_dirscores:
+    make quantity-weighted per-dir scores from scores.txt file
 shell_scripts/youtube_archive/score_video_files:
     "score" how much space will be saved by transcoding video files
 shell_scripts/youtube_archive/translate_scores_to_dir_scores:

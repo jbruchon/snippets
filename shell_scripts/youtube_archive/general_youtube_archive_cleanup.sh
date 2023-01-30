@@ -14,8 +14,8 @@ for X in */
 	do
 	NUM=$((NUM + 1))
 	echo -en "\rProcessing: $NUM"
-	mkdir -p "$X/metadata" "$X/encoded/nodelete"
-	cd "$X" && mv -- *.jpg *.json *.description *.webp *.srt metadata/ 2>/dev/null
+	[ "$1" != "nodirs" ] && mkdir -p "$X/metadata" "$X/encoded/nodelete"
+	cd "$X" && [ -d "metadata" ] && mv -- *.jpg *.json *.description *.webp *.srt *.vtt *.meta metadata/ 2>/dev/null
 	# Sanitize IP addresses from .info.json files (TAKES A LONG TIME)
 	if [ "$1" = "sanitize" ]
 		then while read NAME
@@ -23,7 +23,7 @@ for X in */
 		done < <(find metadata -type f -name '*.info.json' -print)
 	fi
 	# Delete encoded sources, move videos to nodelete
-	if cd encoded/
+	if [ -d encoded ] && cd encoded/
 		then CNT=0
 		for FILE in *.mp4
 			do

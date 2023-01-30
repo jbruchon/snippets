@@ -52,14 +52,14 @@ test -e "$SF" && while read -r X
 	# Use associative array as a fast lookup table
 	SCK[${SFN[$SCORES]}]=1
 	(( SCORES++ ))
-	[ $((SCORES % 128)) -eq 0 ] && echo -en "Loading scores file: $SCORES\r"
+	[ $(( SCORES % 256 )) -eq 0 ] && echo -en "Loading scores file: $SCORES\r"
 done < "$SF"
 
 while read -r FILE
 	do
 	test -z "$FILE" && continue
 	(( TOTAL++ ))
-	[ $((TOTAL % 16)) -eq 0 ] && echo -en "\rDropped $DROPPED, checked $TOTAL, added $ADDED, already had $EXIST"
+#	echo "LOOP: '$FILE' TOTAL=$TOTAL SCORES=$SCORES ADDED=$ADDED"
 	# Check to see if the file is already present, and skip if so
 	declare -i I=0
 	if [ ! -z "${SCK[$FILE]}" ]
@@ -96,13 +96,14 @@ while read -r FILE
 	SCORE=$((SZ / T * RES))
 
 	# Add score to score list
-#	echo "$SCORE  $RES  $T  $SZ  $FILE"
-	(( SCORES++ ))
+#	echo -e "\n$SCORE  $RES  $T  $SZ  $FILE"
+	(( SCORES++ )); (( ADDED++ ))
 	SSZ[$SCORES]="$SCORE"
 	SFN[$SCORES]="$FILE"
 	SCK[${SFN[$SCORES]}]=1
-	(( ADDED++ ))
-done < <(find -mindepth 2 -maxdepth $MAXDEPTH -type f -size +1000 | grep -e 'webm$' -e 'mkv$' -e 'mp4$' | sort)
+	[ $((TOTAL % 32)) -eq 0 ] && echo -en "\rDropped $DROPPED, checked $TOTAL, added $ADDED, already had $EXIST"
+#	echo "LOOP END: '$FILE' TOTAL=$TOTAL SCORES=$SCORES ADDED=$ADDED"
+done < <(find -mindepth 2 -maxdepth $MAXDEPTH -type f -size +1000 | grep -e '\.webm$' -e '\.mkv$' -e '\.mp4$' | sort -g)
 echo -e "\rScanned $TOTAL, added $ADDED, already had $EXIST, dropped $DROPPED"
 
 # Build new score file
@@ -110,7 +111,7 @@ echo -e "\rScanned $TOTAL, added $ADDED, already had $EXIST, dropped $DROPPED"
 declare -i I=0
 while [ $I -lt $SCORES ]
 	do
-	[ $(( I % 128 )) = 0 ] && echo -en "\rWriting: $I" >&2
+	[ $(( I % 256 )) = 0 ] && echo -en "\rWriting: $I" >&2
 	(( I++ ))
 	OUT="${SSZ[$I]} ${SFN[$I]}"
 	[[ -z "$OUT" || "$OUT" = " " ]] && continue
