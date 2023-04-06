@@ -7,6 +7,7 @@ WD="$(pwd)"
 
 for X in */
 	do cd "$X"
+	echo "$X"
 	git pull
 	test "$1" = "prune" && git gc --prune
 	test "$1" = "gc" && git gc --prune --aggressive
