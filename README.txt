@@ -65,6 +65,7 @@ c/jody_string: str[n][case]cmp that returns only equality (faster)
 c/jody_strstr: two-way strstr() that is relatively fast and quite small
 c/jody_strtoepoch: convert datetime string to seconds since the epoch
 c/jody_win_unicode: Windows Unicode helpers for aiding portability
+c/platform_intrin.h: SSE/AVX/Neon etc. intrinsics header auto-picker
 c/strcat_fixed: a faster strcat() for when string length is already known
 c/string_malloc: a simple, fast memory allocator for small pieces  of data
 c/win_stat: Windows stat() and NT-to-UNIX epoch portability helper code
