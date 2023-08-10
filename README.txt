@@ -37,15 +37,15 @@ Batch files for Windows Command Prompt
 --------------------------------------
 batch_files/clear_event_logs.bat
     clear all possible Event Viewer logs in Windows
-batch_files/companionlink_revival_kit:
+batch_files/clean_user_profile.bat
+    delete junk files and compress things in your Windows user profile
+batch_files/companionlink_revival_kit
     script to watch-and-restart CompanionLink (or anything you edit it for)
 batch_files/compress_win10_with_lzx.bat
-    compress Windows and program files with LZX
-batch_files/compress_win10_with_lzx_unattended.bat
-    same as above, but use nircmdc (nirsoft.net) to run minimized
+    compress Windows and program files with LZX - unattended mode included
 batch_files/delete_unused_driver_packages.bat
     delete all third-party drivers no longer associated with any devices
-batch_files/extract_audio_to_wav:
+batch_files/extract_audio_to_wav
     use ffmpeg to pull the first audio track out of a video file (to WAV)
 batch_files/fix_win10_recovery_on_c.bat
     for moving Windows Recovery Environment from a recovery partition to C:
@@ -79,37 +79,39 @@ can sometimes have surpising side effects, so be careful!
 
 Shell scripts (POSIX sh and/or GNU Bash)
 ----------------------------------------
-shell_scripts/ansicolors:
+shell_scripts/ansicolors
     ANSI color escape sequences for shell script echo
-shell_scripts/change_hplj_status:
+shell_scripts/change_hplj_status
     change READY message on old HP LaserJet printer displays
-shell_scripts/clean_mpchc_thumbnail_names:
+shell_scripts/clean_mpchc_thumbnail_names
     remove some of the junk in MPC-HC thumbnail image file names
-shell_scripts/convert_all_to_xz:
+shell_scripts/convert_all_to_xz
     convert all .tar.* packages to .tar.xz and report saved space
-shell_scripts/colordiff:
+shell_scripts/colordiff
     colorize diff output, but without needing Perl like colordiff.org
-shell_scripts/count_total_files_in_directory:
+shell_scripts/count_total_files_in_directory
     shows how many files are under each subdirectory of the current one
-shell_scripts/gather_file_dir_statistics:
+shell_scripts/gather_file_dir_statistics
     shows various file/directory stats, including avg/min/max file size
-shell_scripts/git_pull_all:
+shell_scripts/git_log_neat_oneline
+    a nice way to show compact git logs
+shell_scripts/git_pull_all
     in a directory of Git project directories, enter each and 'git pull'
-shell_scripts/remove_empty_dirs:
+shell_scripts/remove_empty_dirs
     delete all empty directories underneath a specified directory
-shell_scripts/refresh_directories:
+shell_scripts/refresh_directories
     attempt to defragment a directory while preserving date and permissions
 
 --- YouTube archive management scripts ---
 Read the README.txt in shell_scripts/youtube_archive/ for full explanations
 Not all scripts will be mentioned below!
-shell_scripts/youtube_archive/count_files_in_dirs:
+shell_scripts/youtube_archive/count_files_in_dirs
     show count of files in all subdirectories, excluding their subdirs
-shell_scripts/youtube_archive/find_video_files_without_audio:
+shell_scripts/youtube_archive/find_video_files_without_audio
     scan entire archive for video files with missing audio tracks
-shell_scripts/youtube_archive/create_quantity_dirscores:
+shell_scripts/youtube_archive/create_quantity_dirscores
     make quantity-weighted per-dir scores from scores.txt file
-shell_scripts/youtube_archive/score_video_files:
+shell_scripts/youtube_archive/score_video_files
     "score" how much space will be saved by transcoding video files
-shell_scripts/youtube_archive/translate_scores_to_dir_scores:
+shell_scripts/youtube_archive/translate_scores_to_dir_scores
     make per-directory scores from a score_video_files "scores.txt" file
