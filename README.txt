@@ -89,6 +89,8 @@ shell_scripts/convert_all_to_xz
     convert all .tar.* packages to .tar.xz and report saved space
 shell_scripts/colordiff
     colorize diff output, but without needing Perl like colordiff.org
+shell_scripts/count_entries_in_subdirs
+    count the number of entries in each subdirectory, not recursing
 shell_scripts/count_total_files_in_directory
     shows how many files are under each subdirectory of the current one
 shell_scripts/gather_file_dir_statistics
@@ -101,6 +103,11 @@ shell_scripts/remove_empty_dirs
     delete all empty directories underneath a specified directory
 shell_scripts/refresh_directories
     attempt to defragment a directory while preserving date and permissions
+shell_scripts/xfs_excessalloc
+    check single file for XFS excess allocation and remove it
+shell_scripts/xfs_excessalloc_bigsweep
+    scan subdirs from current dir for XFS excess allocations and remove them
+
 
 --- YouTube archive management scripts ---
 Read the README.txt in shell_scripts/youtube_archive/ for full explanations

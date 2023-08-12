@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+shopt -s nullglob
 
 # Attempts to defragment a directory by moving its contents to a new temporary
 # directory, deleting the old one, and renaming the new one to the original
@@ -6,26 +8,26 @@
 
 TEMPNAME=__REFRESH_TEMP__
 
+echo "Refreshing all directories in this directory"
+
 rmdir -p $TEMPNAME 2>/dev/null
 test -e $TEMPNAME && \
 	echo "$TEMPNAME dir exists after rmdir attempt; aborting" && exit 1
 
-for X in */
-	do
-	test "$X" = "*/" && echo "No directories found to refresh" && exit 1
-	echo "$X"
+while read -r X
+	do echo "$X"
 	test -h "$X" && echo "Skipping symlink: $X" && continue
 	rmdir -p $TEMPNAME 2>/dev/null
 	DT="$(stat -c '%y' "$X" | cut -d. -f1)"
 	PERM="$(stat -c '%a' "$X")"
 	OWN="$(stat -c '%u:%g' "$X")"
-	mkdir $TEMPNAME && \
-		mv "$X"/* $TEMPNAME/ && \
+	mkdir "$X"$TEMPNAME && \
+		find "$X/" -mindepth 1 -maxdepth 1 -exec mv -i '{}' "$X$TEMPNAME/" + &&
 		rmdir "$X" && \
-		mv $TEMPNAME "$X"
+		mv "$X"$TEMPNAME "$X"
 	# Restore modify date/time, permissions, and UID/GID
 	touch -d "$DT" "$X"
-	chmod $PERM "$X"
 	chown $OWN "$X"
-	rmdir -f "$TEMPNAME" 2>/dev/null >/dev/null
-done
+	chmod $PERM "$X"
+done < <(find . -mindepth 1 -maxdepth 1 -type d | sort -g)
+#		mv "$X"/* "$X"/.??* "$X"$TEMPNAME/ && \
