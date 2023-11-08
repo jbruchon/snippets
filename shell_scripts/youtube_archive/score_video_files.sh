@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2021 by Jody Bruchon <jody@jodybruchon.com>
+# Copyright (C) 2021-2023 by Jody Bruchon <jody@jodybruchon.com>
 # Released under The MIT License
 
 # Use ffprobe duration vs file size to "score" video file "weights"
@@ -53,7 +53,7 @@ test -e "$SF" && while read -r X
 	SCK[${SFN[$SCORES]}]=1
 	(( SCORES++ ))
 	[ $(( SCORES % 256 )) -eq 0 ] && echo -en "Loading scores file: $SCORES\r"
-done < "$SF"
+done < <(sort -k2 "$SF")
 
 while read -r FILE
 	do
