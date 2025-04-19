@@ -8,7 +8,9 @@ WD="$(pwd)"
 for X in */
 	do cd "$X"
 	echo "$X"
-	git pull
+	git remote update
+	git fetch --all
+	git pull --all
 	test "$1" = "prune" && git gc --prune
 	test "$1" = "gc" && git gc --prune --aggressive
 	cd "$WD"
