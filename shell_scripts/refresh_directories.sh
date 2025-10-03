@@ -8,7 +8,12 @@ shopt -s nullglob
 
 TEMPNAME=__REFRESH_TEMP__
 
-echo "Refreshing all directories in this directory"
+if [ -d "$1" ]
+	then cd "$1"
+	echo "Refreshing all directories in '$1'"
+	else
+	echo "Refreshing all directories in this directory"
+fi
 
 rmdir -p $TEMPNAME 2>/dev/null
 test -e $TEMPNAME && \
@@ -17,6 +22,7 @@ test -e $TEMPNAME && \
 while read -r X
 	do echo "$X"
 	test -h "$X" && echo "Skipping symlink: $X" && continue
+	mountpoint -q "$X" && echo "Skipping mountpoint: $X" && continue
 	rmdir -p $TEMPNAME 2>/dev/null
 	DT="$(stat -c '%y' "$X" | cut -d. -f1)"
 	PERM="$(stat -c '%a' "$X")"
@@ -29,5 +35,5 @@ while read -r X
 	touch -d "$DT" "$X"
 	chown $OWN "$X"
 	chmod $PERM "$X"
-done < <(find . -mindepth 1 -maxdepth 1 -type d | sort -g)
+done < <(find . -xdev -mindepth 1 -maxdepth 1 -type d | sort -fg)
 #		mv "$X"/* "$X"/.??* "$X"$TEMPNAME/ && \

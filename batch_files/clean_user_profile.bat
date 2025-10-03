@@ -1,21 +1,31 @@
-@rem Cleanup script by Jody Bruchon <jody@jodybruchon.com>
+rem Cleanup script by Jody Bruchon (jody@jodybruchon.com)
+rem Last changed 2023-08-24
 
+set CUR="%CD%"
 cd "%USERPROFILE%\APPDATA"
 
-# Close browsers/programs
-for %%d in (msedge firefox chrome brave rdrcef slack dialpad CiscoCollabHost) do taskkill /f /im "%%d.exe"
+rem Close browsers/programs
+for %%d in (msedge firefox chrome brave dissenter rdrcef slack dialpad CiscoCollabHost Teams) do taskkill /f /im "%%d.exe"
+for %%d in (msedge firefox chrome brave dissenter rdrcef slack dialpad CiscoCollabHost Teams) do taskkill /f /im "%%d.exe"
 
-rem Firefox caches/storage
+rem Firefox/Thunderbird caches/storage
 rd /s /q "%LOCALAPPDATA%\Mozilla"
 rd /s /q "%APPDATA%\Mozilla\Firefox\Crash Reports"
-for /f "usebackq delims=" %%d in (`dir /b Roaming\Mozilla\Firefox\Profiles\`) do for /f usebackq %%e in (`dir /b "Roaming\Mozilla\Firefox\Profiles\%%d\storage\default"`) do rd /s /q "Roaming\Mozilla\Firefox\Profiles\%%d\storage\default\%%e"
+rd /s /q "%APPDATA%\Mozilla\Firefox\Pending Pings"
+for /f "usebackq delims=" %%d in (`dir /b Roaming\Mozilla\Firefox\Profiles\`) do for /f usebackq %%e in (`dir /b "Roaming\Mozilla\Firefox\Profiles\%%d\storage\default\http*"`) do rd /s /q "Roaming\Mozilla\Firefox\Profiles\%%d\storage\default\%%e"
 for /f "usebackq delims=" %%d in (`dir /b Roaming\Mozilla\Firefox\Profiles\`) do for %%e in (crashes datareporting minidumps saved-telemetry-pings) do rd /s /q "Roaming\Mozilla\Firefox\Profiles\%%d\%%e"
+rd /s /q "%LOCALAPPDATA%\Thunderbird"
+rd /s /q "%APPDATA%\Thunderbird\Crash Reports"
+rd /s /q "%APPDATA%\Thunderbird\Pending Pings"
+for /f "usebackq delims=" %%d in (`dir /b Roaming\Thunderbird\Profiles\`) do for /f usebackq %%e in (`dir /b "Roaming\Thunderbird\Profiles\%%d\storage\default\http*"`) do rd /s /q "Roaming\Thunderbird\Profiles\%%d\storage\default\%%e"
+for /f "usebackq delims=" %%d in (`dir /b Roaming\Thunderbird\Profiles\`) do for %%e in (crashes datareporting minidumps saved-telemetry-pings) do rd /s /q "Roaming\Thunderbird\Profiles\%%d\%%e"
 
 rem Chrome/Chromium caches
 for /f "usebackq delims=" %%d in (`dir /s /b "Cache"`) do rd /s /q "%%d"
 for /f "usebackq delims=" %%d in (`dir /s /b "Code Cache"`) do rd /s /q "%%d"
 for /f "usebackq delims=" %%d in (`dir /s /b "Crashpad"`) do rd /s /q "%%d"
 for /f "usebackq delims=" %%d in (`dir /s /b "GPUCache"`) do rd /s /q "%%d"
+for /f "usebackq delims=" %%d in (`dir /s /b "GrShaderCache"`) do rd /s /q "%%d"
 for /f "usebackq delims=" %%d in (`dir /s /b "Service Worker"`) do rd /s /q "%%d"
 
 rem System/user temp folders
@@ -30,6 +40,9 @@ for /f "usebackq delims=" %%d in (`dir /b /a:-d "%LOCALAPPDATA%\CiscoSpark\*.zip
 
 rem Windows Search cache
 rd /s /q "%LOCALAPPDATA%\Packages\Microsoft.Windows.Search_cw5n1h2txyewy\LocalState\DeviceSearchCache"
+
+rem Windows general internet caches
+rd /s /q "%LOCALAPPDATA%\Microsoft\Windows\INetCache"
 
 rem Dialpad
 rd /s /q "%LOCALAPPDATA%\Dialpad\Packages"
@@ -50,3 +63,5 @@ for %%d in (Download Install Temp) do rd /s /q "%ProgramFiles(x86)%\Microsoft\Ed
 
 rem Compact everything
 compact /exe:lzx /c /s /i *
+
+cd %CUR%

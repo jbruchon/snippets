@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Excessive allocation mass cleanup script
-# Copyright (C) 2022 by Jody Bruchon <jody@jodybruchon.com>
+# Copyright (C) 2022-2023 by Jody Bruchon <jody@jodybruchon.com>
 # Distributed under The MIT License
 #
 # This script scans for excess data allocation sizes on files and runs
@@ -14,12 +14,14 @@
 
 
 # Minimum difference in bytes to consider "excess" (default to 4K blocks)
-[ -z "$MIN" ] && MIN=$((4 * 1024))
+# This is 8K by default; truncating smaller sizes seems to have no effect
+[ -z "$MIN" ] && MIN=$((2 * 4096))
 
 ST=0
 declare -a FN
 BATCHSIZE=1024
 CNT=0; TOTAL=0; PROG=0; TDIFF=0
+[ -z "$MIN" ] && MIN=4096
 
 [ -z "$TRUNCATE" ] && TRUNCATE=truncate
 [ "$1" = "-n" ] && echo "No-action mode enabled" && TRUNCATE="echo truncate"
@@ -45,9 +47,16 @@ process_batch () {
 		[ "$V" = "1" ] && echo "debug: $BLOCKS * $BS = $ALLOC - $SIZE = $DIFF (file '$FILE')"
 
 		# If a minimum size is set, zero anything lower; ignore such files
+		# The minimum has been moved to the find command in the main loop
 		[ ! -z "$MIN" ] && [ $DIFF -lt $MIN ] && DIFF=0
-		[ $DIFF -ne 0 ] && echo "$DIFF $FILE" && $TRUNCATE -cr "$FILE" "$FILE"
-		TDIFF=$((TDIFF + DIFF))
+		if [ $DIFF -ne 0 ]
+			then
+			FD="$(stat -c %y "$FILE" | cut -d. -f1)"
+			echo "$DIFF $FILE"
+			$TRUNCATE -cr "$FILE" "$FILE" && touch -cd "$FD" "$FILE"
+			#echo "TD $TDIFF + $DIFF"
+			TDIFF=$((TDIFF + DIFF))
+		fi
 		IDX=$((IDX + 1))
 	done
 	CNT=0
@@ -63,7 +72,7 @@ while read -r FILE
 	[ "$V" != "1" ] && update_progress
 	CNT=$((CNT + 1))
 	[ $CNT -ge $BATCHSIZE ] && process_batch
-done < <(find . -type f)
+done < <(find . -xdev -type f -size +${MIN}c)
 
 # Process any less-than-BATCHSIZE set of files
 echo
